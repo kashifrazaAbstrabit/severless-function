@@ -29,6 +29,22 @@ const pool = new pg_1.Pool({
     port: Number(process.env.DB_PORT) || 5432,
     ssl: { rejectUnauthorized: false },
 });
+app.get("/", (req, res) => {
+    res.send("🚀 Welcome to the IntelliDev API! The server is running.");
+});
+app.get("/test-db", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const result = yield pool.query("SELECT NOW()");
+        res.json({
+            message: "Database connected successfully!",
+            timestamp: result.rows[0],
+        });
+    }
+    catch (error) {
+        console.error("Database connection failed:", error);
+        res.status(500).json({ error: "Database connection failed!" });
+    }
+}));
 // Endpoint to insert data
 app.post("/insert-data", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     // Check if the request body is an array
